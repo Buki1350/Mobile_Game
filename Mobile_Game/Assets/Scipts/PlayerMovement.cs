@@ -19,7 +19,6 @@ public class PlayerMovement : MonoBehaviour
     Quaternion targetRotation = Quaternion.identity;
     float JStickInputDegres = 0f;
     float JStickInputRadians = 0f;
-    float smoothedRotation = 0f;
     float rotationDelta = 0;
     void Start()
     {
