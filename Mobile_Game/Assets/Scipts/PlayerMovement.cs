@@ -12,6 +12,8 @@ public class PlayerMovement : MonoBehaviour
     public FixedJoystick FJoystick_L;
     public FixedJoystick FJoystick_R;
 
+    public Animator animator;
+
     bool isMoving = false;
     bool isFighting = false;
 
@@ -65,6 +67,9 @@ public class PlayerMovement : MonoBehaviour
             playerBody.rotation = Quaternion.Lerp(playerBody.rotation, targetRotation, 100f / rotationDelta * rotationSpeed * Time.deltaTime);
         }
 
-        Debug.Log(FJoystick_L.Horizontal + " || " + FJoystick_L.Vertical);
+        if (isMoving)
+            animator.SetBool("IsMoving", true);
+        else
+            animator.SetBool("IsMoving", false);
     }
 }
