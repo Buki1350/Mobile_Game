@@ -5,13 +5,11 @@ using UnityEngine;
 public class LevelGeneration : MonoBehaviour
 {
     [SerializeField] GameObject Player;
-    GameObject[] RoomX;
-    GameObject[] RoomT;
-    GameObject[] RoomL;
-    GameObject[] RoomI;
-    GameObject[] Room1;
-
-    
+    [SerializeField] GameObject[] RoomX;
+    [SerializeField] GameObject[] RoomT;
+    [SerializeField] GameObject[] RoomL;
+    [SerializeField] GameObject[] RoomI;
+    [SerializeField] GameObject[] Room1;
 
 
     void Start()
