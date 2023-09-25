@@ -1,0 +1,147 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!319 &31900000
+AvatarMask:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: UpperBody
+  m_Mask: 00000000010000000100000000000000000000000100000001000000010000000100000000000000000000000100000001000000
+  m_Elements:
+  - m_Path: 
+    m_Weight: 1
+  - m_Path: Armature
+    m_Weight: 0
+  - m_Path: Armature/IKPoleBone_L
+    m_Weight: 0
+  - m_Path: Armature/IKPoleBone_L/IKPoleBone_L_end
+    m_Weight: 0
+  - m_Path: Armature/IKPoleBone_R
+    m_Weight: 0
+  - m_Path: Armature/IKPoleBone_R/IKPoleBone_R_end
+    m_Weight: 0
+  - m_Path: Armature/IKTargetBone_L
+    m_Weight: 0
+  - m_Path: Armature/IKTargetBone_L/IKTargetBone_L_end
+    m_Weight: 0
+  - m_Path: Armature/IKTargetBone_R
+    m_Weight: 0
+  - m_Path: Armature/IKTargetBone_R/IKTargetBone_R_end
+    m_Weight: 0
+  - m_Path: Armature/Root
+    m_Weight: 1
+  - m_Path: Armature/Root/Spine1
+    m_Weight: 1
+  - m_Path: Armature/Root/Spine1/Spine2
+    m_Weight: 1
+  - m_Path: Armature/Root/Spine1/Spine2/Neck
+    m_Weight: 1
+  - m_Path: Armature/Root/Spine1/Spine2/Neck/Head
+    m_Weight: 1
+  - m_Path: Armature/Root/Spine1/Spine2/Neck/Head/Head_end
+    m_Weight: 1
+  - m_Path: Armature/Root/Spine1/Spine2/Shoulder_L
+    m_Weight: 1
+  - m_Path: Armature/Root/Spine1/Spine2/Shoulder_L/UpperArm_L
+    m_Weight: 1
+  - m_Path: Armature/Root/Spine1/Spine2/Shoulder_L/UpperArm_L/LowerArm_L
+    m_Weight: 1
+  - m_Path: Armature/Root/Spine1/Spine2/Shoulder_L/UpperArm_L/LowerArm_L/Hand_L
+    m_Weight: 1
+  - m_Path: Armature/Root/Spine1/Spine2/Shoulder_L/UpperArm_L/LowerArm_L/Hand_L/MFinger1_L
+    m_Weight: 1
+  - m_Path: Armature/Root/Spine1/Spine2/Shoulder_L/UpperArm_L/LowerArm_L/Hand_L/MFinger1_L/MFinger2_L
+    m_Weight: 1
+  - m_Path: Armature/Root/Spine1/Spine2/Shoulder_L/UpperArm_L/LowerArm_L/Hand_L/MFinger1_L/MFinger2_L/MFinger2_L_end
+    m_Weight: 1
+  - m_Path: Armature/Root/Spine1/Spine2/Shoulder_L/UpperArm_L/LowerArm_L/Hand_L/PFinger1_L
+    m_Weight: 1
+  - m_Path: Armature/Root/Spine1/Spine2/Shoulder_L/UpperArm_L/LowerArm_L/Hand_L/PFinger1_L/PFinger2_L
+    m_Weight: 1
+  - m_Path: Armature/Root/Spine1/Spine2/Shoulder_L/UpperArm_L/LowerArm_L/Hand_L/PFinger1_L/PFinger2_L/PFinger2_L_end
+    m_Weight: 1
+  - m_Path: Armature/Root/Spine1/Spine2/Shoulder_L/UpperArm_L/LowerArm_L/Hand_L/RFinger1_L
+    m_Weight: 1
+  - m_Path: Armature/Root/Spine1/Spine2/Shoulder_L/UpperArm_L/LowerArm_L/Hand_L/RFinger1_L/RFinger2_L
+    m_Weight: 1
+  - m_Path: Armature/Root/Spine1/Spine2/Shoulder_L/UpperArm_L/LowerArm_L/Hand_L/RFinger1_L/RFinger2_L/RFinger2_L_end
+    m_Weight: 1
+  - m_Path: Armature/Root/Spine1/Spine2/Shoulder_L/UpperArm_L/LowerArm_L/Hand_L/SFinger1_L
+    m_Weight: 1
+  - m_Path: Armature/Root/Spine1/Spine2/Shoulder_L/UpperArm_L/LowerArm_L/Hand_L/SFinger1_L/SFinger2_L
+    m_Weight: 1
+  - m_Path: Armature/Root/Spine1/Spine2/Shoulder_L/UpperArm_L/LowerArm_L/Hand_L/SFinger1_L/SFinger2_L/SFinger2_L_end
+    m_Weight: 1
+  - m_Path: Armature/Root/Spine1/Spine2/Shoulder_L/UpperArm_L/LowerArm_L/Hand_L/Thumb1_L
+    m_Weight: 1
+  - m_Path: Armature/Root/Spine1/Spine2/Shoulder_L/UpperArm_L/LowerArm_L/Hand_L/Thumb1_L/Thumb2_L
+    m_Weight: 1
+  - m_Path: Armature/Root/Spine1/Spine2/Shoulder_L/UpperArm_L/LowerArm_L/Hand_L/Thumb1_L/Thumb2_L/Thumb2_L_end
+    m_Weight: 1
+  - m_Path: Armature/Root/Spine1/Spine2/Shoulder_R
+    m_Weight: 1
+  - m_Path: Armature/Root/Spine1/Spine2/Shoulder_R/UpperArm_R
+    m_Weight: 1
+  - m_Path: Armature/Root/Spine1/Spine2/Shoulder_R/UpperArm_R/LowerArm_R
+    m_Weight: 1
+  - m_Path: Armature/Root/Spine1/Spine2/Shoulder_R/UpperArm_R/LowerArm_R/Hand_R
+    m_Weight: 1
+  - m_Path: Armature/Root/Spine1/Spine2/Shoulder_R/UpperArm_R/LowerArm_R/Hand_R/MFinger1_R
+    m_Weight: 1
+  - m_Path: Armature/Root/Spine1/Spine2/Shoulder_R/UpperArm_R/LowerArm_R/Hand_R/MFinger1_R/MFinger2_R
+    m_Weight: 1
+  - m_Path: Armature/Root/Spine1/Spine2/Shoulder_R/UpperArm_R/LowerArm_R/Hand_R/MFinger1_R/MFinger2_R/MFinger2_R_end
+    m_Weight: 1
+  - m_Path: Armature/Root/Spine1/Spine2/Shoulder_R/UpperArm_R/LowerArm_R/Hand_R/PFinger1_R
+    m_Weight: 1
+  - m_Path: Armature/Root/Spine1/Spine2/Shoulder_R/UpperArm_R/LowerArm_R/Hand_R/PFinger1_R/PFinger2_R
+    m_Weight: 1
+  - m_Path: Armature/Root/Spine1/Spine2/Shoulder_R/UpperArm_R/LowerArm_R/Hand_R/PFinger1_R/PFinger2_R/PFinger2_R_end
+    m_Weight: 1
+  - m_Path: Armature/Root/Spine1/Spine2/Shoulder_R/UpperArm_R/LowerArm_R/Hand_R/RFinger1_R
+    m_Weight: 1
+  - m_Path: Armature/Root/Spine1/Spine2/Shoulder_R/UpperArm_R/LowerArm_R/Hand_R/RFinger1_R/RFinger2_R
+    m_Weight: 1
+  - m_Path: Armature/Root/Spine1/Spine2/Shoulder_R/UpperArm_R/LowerArm_R/Hand_R/RFinger1_R/RFinger2_R/RFinger2_R_end
+    m_Weight: 1
+  - m_Path: Armature/Root/Spine1/Spine2/Shoulder_R/UpperArm_R/LowerArm_R/Hand_R/SFinger1_R
+    m_Weight: 1
+  - m_Path: Armature/Root/Spine1/Spine2/Shoulder_R/UpperArm_R/LowerArm_R/Hand_R/SFinger1_R/SFinger2_R
+    m_Weight: 1
+  - m_Path: Armature/Root/Spine1/Spine2/Shoulder_R/UpperArm_R/LowerArm_R/Hand_R/SFinger1_R/SFinger2_R/SFinger2_R_end
+    m_Weight: 1
+  - m_Path: Armature/Root/Spine1/Spine2/Shoulder_R/UpperArm_R/LowerArm_R/Hand_R/Thumb1_R
+    m_Weight: 1
+  - m_Path: Armature/Root/Spine1/Spine2/Shoulder_R/UpperArm_R/LowerArm_R/Hand_R/Thumb1_R/Thumb2_R
+    m_Weight: 1
+  - m_Path: Armature/Root/Spine1/Spine2/Shoulder_R/UpperArm_R/LowerArm_R/Hand_R/Thumb1_R/Thumb2_R/Thumb2_R_end
+    m_Weight: 1
+  - m_Path: Armature/Root/UpperLeg_L
+    m_Weight: 0
+  - m_Path: Armature/Root/UpperLeg_L/LowerLeg_L
+    m_Weight: 0
+  - m_Path: Armature/Root/UpperLeg_L/LowerLeg_L/Foot_L
+    m_Weight: 0
+  - m_Path: Armature/Root/UpperLeg_L/LowerLeg_L/Foot_L/Foot_L_end
+    m_Weight: 0
+  - m_Path: Armature/Root/UpperLeg_R
+    m_Weight: 0
+  - m_Path: Armature/Root/UpperLeg_R/LowerLeg_R
+    m_Weight: 0
+  - m_Path: Armature/Root/UpperLeg_R/LowerLeg_R/Foot_R
+    m_Weight: 0
+  - m_Path: Armature/Root/UpperLeg_R/LowerLeg_R/Foot_R/Foot_R_end
+    m_Weight: 0
+  - m_Path: Arms_Default
+    m_Weight: 1
+  - m_Path: Chest_Default
+    m_Weight: 1
+  - m_Path: Hair_3
+    m_Weight: 1
+  - m_Path: Head_Default
+    m_Weight: 1
+  - m_Path: Legs_Default
+    m_Weight: 1
+  - m_Path: Sword_Tron
+    m_Weight: 1
