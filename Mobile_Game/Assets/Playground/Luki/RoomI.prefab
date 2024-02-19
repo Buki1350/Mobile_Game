@@ -51,7 +51,8 @@ MonoBehaviour:
     cells:
     - row: 0100
     - row: 0100
-  OriginCoordinates: {x: 0, y: 1}
+  OriginCoordinateX: 0
+  OriginCoordinateY: 1
 --- !u!1001 &2638560713362660212
 PrefabInstance:
   m_ObjectHideFlags: 0
