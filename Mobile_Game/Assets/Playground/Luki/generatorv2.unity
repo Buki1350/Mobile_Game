@@ -153,16 +153,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   LevelOrigin: {x: 0, y: 0, z: 0}
-  GenerateByCells: 1
-  SizeOfRoomDoesntMatter: 1
-  LevelSize: 10
+  LevelSize: 50
+  GenerateBy: 1
   CellSize: 3
-  CellSpace: 3
+  CellSpace: 1
   startRoom: {fileID: 3252570534905319413, guid: 9ad0b228ec876ca42a2466c6164f5ad7,
+    type: 3}
+  uniqueRooms:
+  - {fileID: 8152592651395964098, guid: 83fc4e2a2521ba64881aa43f7488d4fa, type: 3}
+  bossRoom: {fileID: 8152592651395964098, guid: dadac919a258c63448fc18a146b74b09,
     type: 3}
   rooms:
   - {fileID: 1241877488129067353, guid: d697f0b39ef25ed428798d3fbff5d44a, type: 3}
   - {fileID: 1241877488129067353, guid: c220fb8234cdce54fa6bc0d6f87e64de, type: 3}
+  - {fileID: 8152592651395964098, guid: 608d0cd0fffbbf34fa8ede4446b8e946, type: 3}
 --- !u!4 &572107957
 Transform:
   m_ObjectHideFlags: 0
@@ -189,6 +193,7 @@ GameObject:
   - component: {fileID: 932113378}
   - component: {fileID: 932113377}
   - component: {fileID: 932113376}
+  - component: {fileID: 932113379}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -270,6 +275,50 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &932113379
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 932113375}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_RenderShadows: 1
+  m_RequiresDepthTextureOption: 2
+  m_RequiresOpaqueTextureOption: 2
+  m_CameraType: 0
+  m_Cameras: []
+  m_RendererIndex: -1
+  m_VolumeLayerMask:
+    serializedVersion: 2
+    m_Bits: 1
+  m_VolumeTrigger: {fileID: 0}
+  m_VolumeFrameworkUpdateModeOption: 2
+  m_RenderPostProcessing: 0
+  m_Antialiasing: 0
+  m_AntialiasingQuality: 2
+  m_StopNaN: 0
+  m_Dithering: 0
+  m_ClearDepth: 1
+  m_AllowXRRendering: 1
+  m_AllowHDROutput: 1
+  m_UseScreenCoordOverride: 0
+  m_ScreenSizeOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_ScreenCoordScaleBias: {x: 0, y: 0, z: 0, w: 0}
+  m_RequiresDepthTexture: 0
+  m_RequiresColorTexture: 0
+  m_Version: 2
+  m_TaaSettings:
+    quality: 3
+    frameInfluence: 0.1
+    jitterScale: 1
+    mipBias: 0
+    varianceClampScale: 0.9
+    contrastAdaptiveSharpening: 0
 --- !u!1 &1814062344
 GameObject:
   m_ObjectHideFlags: 0
