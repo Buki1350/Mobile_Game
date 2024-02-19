@@ -33,11 +33,11 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: TPose
-      takeName: TPose
+      name: Armature|Sword_Attack1
+      takeName: Armature|Sword_Attack1
       internalID: -6519760567115542380
       firstFrame: 0
-      lastFrame: 1
+      lastFrame: 9
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
