@@ -161,7 +161,14 @@ public class RoomsAssembler : MonoBehaviour
         for (int j = 0; j < levelGridSize; j++)
             for (int i = 0; i < levelGridSize; i++)
                 if (levelRoomsMatrix[i, j] != null)
-                    Instantiate(levelRoomsMatrix[i, j], new Vector3(LevelOrigin.x + (CellSize + CellSpace) * i - (CellSize + CellSpace) * levelGridSize / 2, LevelOrigin.y, LevelOrigin.z - (CellSize + CellSpace) * j + (CellSize + CellSpace) * levelGridSize / 2), Quaternion.identity);
+                    Instantiate(
+                        levelRoomsMatrix[i, j], 
+                        new Vector3(
+                            LevelOrigin.x + (CellSize + CellSpace) * i - (CellSize + CellSpace) * levelGridSize / 2 + (CellSize + CellSpace) / 2,
+                            LevelOrigin.y,
+                            LevelOrigin.z - (CellSize + CellSpace) * j + (CellSize + CellSpace) * levelGridSize / 2 - (CellSize + CellSpace) / 2), 
+                        Quaternion.identity
+                        );
 
         //Drawing bridges from freeWayMatrix
         for (int j = 0; j < levelGridSize - 1; j++)
@@ -169,10 +176,26 @@ public class RoomsAssembler : MonoBehaviour
             for (int i = 0; i < levelGridSize - 1; i++)
             {
                 if (freeWaysMatrix[i, j].right && freeWaysMatrix[i + 1, j].left)
-                    Instantiate(bridge, new Vector3(LevelOrigin.x - (CellSize + CellSpace) * levelGridSize / 2 + (CellSize + CellSpace) * i + (CellSize/2 + CellSpace/2), LevelOrigin.y + CellSize/2, LevelOrigin.z - (CellSize + CellSpace) * j + (CellSize + CellSpace) * levelGridSize / 2), Quaternion.Euler(new Vector3(0.0f, 90.0f, 0.0f)));
-                
+                    Instantiate(
+                            bridge,
+                            new Vector3(
+                                LevelOrigin.x - (CellSize + CellSpace) * levelGridSize / 2 + (CellSize + CellSpace) * i + (CellSize + CellSpace) / 2 + (CellSize + CellSpace) / 2,
+                                LevelOrigin.y,
+                                LevelOrigin.z - (CellSize + CellSpace) * j + (CellSize + CellSpace) * levelGridSize / 2 - (CellSize + CellSpace) / 2
+                                ),
+                            Quaternion.Euler(new Vector3(0.0f, 90.0f, 0.0f))
+                            );
+
                 if (freeWaysMatrix[i, j].down && freeWaysMatrix[i, j + 1].up)
-                    Instantiate(bridge, new Vector3(LevelOrigin.x + (CellSize + CellSpace) * i - (CellSize + CellSpace) * levelGridSize / 2, LevelOrigin.y + CellSize / 2, LevelOrigin.z + (CellSize + CellSpace) * levelGridSize / 2 - (CellSize + CellSpace) * j - (CellSize / 2 + CellSpace / 2)), Quaternion.identity);
+                    Instantiate(
+                                bridge,
+                                new Vector3(
+                                    LevelOrigin.x - (CellSize + CellSpace) * levelGridSize / 2 + (CellSize + CellSpace) * i + (CellSize + CellSpace) / 2,
+                                    LevelOrigin.y,
+                                    LevelOrigin.z - (CellSize + CellSpace) * j + (CellSize + CellSpace) * levelGridSize / 2 - (CellSize + CellSpace) 
+                                    ),
+                                Quaternion.identity
+                                );
             }
         }
 
