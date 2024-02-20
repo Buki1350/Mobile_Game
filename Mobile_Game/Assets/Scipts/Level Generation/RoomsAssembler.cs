@@ -24,8 +24,9 @@ public class RoomsAssembler : MonoBehaviour
     [SerializeField] float CellSpace = 3;
 
     [SerializeField] GameObject startRoom;
-    [SerializeField] GameObject[] uniqueRooms;
     [SerializeField] GameObject bossRoom;
+    [SerializeField] GameObject bridge;
+    [SerializeField] GameObject[] uniqueRooms;
     [SerializeField] GameObject[] rooms;
     Dictionary<int, List<GameObject>> roomsBySize = new Dictionary<int, List<GameObject>>();
 
@@ -35,6 +36,25 @@ public class RoomsAssembler : MonoBehaviour
     GameObject[,] levelRoomsMatrix; //represents origins of rooms
 
     bool roomsCreated = false;
+
+
+    //Represents a place for bridge
+    struct FreeWays
+    {
+        public bool up;
+        public bool down;
+        public bool left;
+        public bool right;
+
+        public FreeWays(int x = 0)
+        {
+            up = false;
+            down = false;
+            left = false;
+            right = false;
+        }
+    }
+    FreeWays[,] freeWaysMatrix;
 
     void Start()
     {
@@ -109,9 +129,15 @@ public class RoomsAssembler : MonoBehaviour
 
         levelCellsMatrix = new int[levelGridSize, levelGridSize];
         levelRoomsMatrix = new GameObject[levelGridSize, levelGridSize];
+        freeWaysMatrix = new FreeWays[levelGridSize, levelGridSize];
 
         levelCellsMatrix[levelGridSize / 2, levelGridSize / 2] = -1;
         levelRoomsMatrix[levelGridSize / 2, levelGridSize / 2] = startRoom;
+        freeWaysMatrix[levelGridSize / 2, levelGridSize / 2].up = true;
+        freeWaysMatrix[levelGridSize / 2, levelGridSize / 2].down = true;
+        freeWaysMatrix[levelGridSize / 2, levelGridSize / 2].left = true;
+        freeWaysMatrix[levelGridSize / 2, levelGridSize / 2].right = true;
+
     }
 
     void Update()
@@ -131,46 +157,81 @@ public class RoomsAssembler : MonoBehaviour
         
     void DrawRooms()
     {
-        //if (currentLevelSize < LevelSize)
-        //{
-            for (int j = 0; j < levelGridSize; j++)
-                for (int i = 0; i < levelGridSize; i++)
-                    if (levelRoomsMatrix[i, j] != null)
-                        Instantiate(levelRoomsMatrix[i, j], new Vector3(LevelOrigin.x + (CellSize + CellSpace) * i - (CellSize + CellSpace) * levelGridSize / 2, LevelOrigin.y, LevelOrigin.z - (CellSize + CellSpace) * j + (CellSize + CellSpace) * levelGridSize / 2), Quaternion.identity);
-       
-            #region DEBUG VISUALIZER
-            //For visualize on debugger
-            //string line = "\n";
-            //for (int j = 0; j < levelGridSize; j++)
-            //{
-            //    for (int i = 0; i < levelGridSize; i++)
-            //    {
-            //        if (levelCellsMatrix[i, j] == -1)
-            //            line += "X";
-            //        else if (levelCellsMatrix[i, j] == 1)
-            //            line += "H";
-            //        else
-            //            line += "O";
-            //    }
-            //    line += "\n";
-            //}
-            //UnityEngine.Debug.Log(line);
+        //Drawing rooms from room origin matrix
+        for (int j = 0; j < levelGridSize; j++)
+            for (int i = 0; i < levelGridSize; i++)
+                if (levelRoomsMatrix[i, j] != null)
+                    Instantiate(
+                        levelRoomsMatrix[i, j], 
+                        new Vector3(
+                            LevelOrigin.x + (CellSize + CellSpace) * i - (CellSize + CellSpace) * levelGridSize / 2 + (CellSize + CellSpace) / 2,
+                            LevelOrigin.y,
+                            LevelOrigin.z - (CellSize + CellSpace) * j + (CellSize + CellSpace) * levelGridSize / 2 - (CellSize + CellSpace) / 2), 
+                        Quaternion.identity
+                        );
 
-            //line = "\n";
-            //for (int j = 0; j < levelGridSize; j++)
-            //{
-            //    for (int i = 0; i < levelGridSize; i++)
-            //    {
-            //        if (levelRoomsMatrix[i, j] != null)
-            //            line += "X";
-            //        else
-            //            line += "O";
-            //    }
-            //    line += "\n";
-            //}
-            //UnityEngine.Debug.Log(line);
-            //}
-            #endregion
+        //Drawing bridges from freeWayMatrix
+        for (int j = 0; j < levelGridSize - 1; j++)
+        {
+            for (int i = 0; i < levelGridSize - 1; i++)
+            {
+                if (freeWaysMatrix[i, j].right && freeWaysMatrix[i + 1, j].left)
+                    Instantiate(
+                            bridge,
+                            new Vector3(
+                                LevelOrigin.x - (CellSize + CellSpace) * levelGridSize / 2 + (CellSize + CellSpace) * i + (CellSize + CellSpace) / 2 + (CellSize + CellSpace) / 2,
+                                LevelOrigin.y,
+                                LevelOrigin.z - (CellSize + CellSpace) * j + (CellSize + CellSpace) * levelGridSize / 2 - (CellSize + CellSpace) / 2
+                                ),
+                            Quaternion.Euler(new Vector3(0.0f, 90.0f, 0.0f))
+                            );
+
+                if (freeWaysMatrix[i, j].down && freeWaysMatrix[i, j + 1].up)
+                    Instantiate(
+                                bridge,
+                                new Vector3(
+                                    LevelOrigin.x - (CellSize + CellSpace) * levelGridSize / 2 + (CellSize + CellSpace) * i + (CellSize + CellSpace) / 2,
+                                    LevelOrigin.y,
+                                    LevelOrigin.z - (CellSize + CellSpace) * j + (CellSize + CellSpace) * levelGridSize / 2 - (CellSize + CellSpace) 
+                                    ),
+                                Quaternion.identity
+                                );
+            }
+        }
+
+        #region DEBUG VISUALIZER
+                //For visualize on debugger
+                //string line = "\n";
+                //for (int j = 0; j < levelGridSize; j++)
+                //{
+                //    for (int i = 0; i < levelGridSize; i++)
+                //    {
+                //        if (levelCellsMatrix[i, j] == -1)
+                //            line += "X";
+                //        else if (levelCellsMatrix[i, j] == 1)
+                //            line += "H";
+                //        else
+                //            line += "O";
+                //    }
+                //    line += "\n";
+                //}
+                //UnityEngine.Debug.Log(line);
+
+                //line = "\n";
+                //for (int j = 0; j < levelGridSize; j++)
+                //{
+                //    for (int i = 0; i < levelGridSize; i++)
+                //    {
+                //        if (levelRoomsMatrix[i, j] != null)
+                //            line += "X";
+                //        else
+                //            line += "O";
+                //    }
+                //    line += "\n";
+                //}
+                //UnityEngine.Debug.Log(line);
+                //}
+                #endregion
     }
 
     void AddRoom()
@@ -270,115 +331,160 @@ public class RoomsAssembler : MonoBehaviour
         #region CENTERING BY ORIGIN
         //Push temporary model into the center of a level
         bool centered = false;
-            int centerIndex = levelGridSize / 2;
+        int centerIndex = levelGridSize / 2;
 
-            //Bugfix - when room had origin not in (0, 0) algorithm could not work near the center of a grid
-            int onGridOriginPosX = onGridPosX + currentRoom.GetComponent<RoomParam>().OriginCoordinateX;
-            int onGridOriginPosY = onGridPosY + currentRoom.GetComponent<RoomParam>().OriginCoordinateY;
+        //Bugfix - when room had origin not in (0, 0) algorithm could not work near the center of a grid
+        int onGridOriginPosX = onGridPosX + currentRoom.GetComponent<RoomParam>().OriginCoordinateX;
+        int onGridOriginPosY = onGridPosY + currentRoom.GetComponent<RoomParam>().OriginCoordinateY;
 
-            //To go in a straight line from beggining rather than only in diagonal
-            //When crntRatio > initRatio - move horizontally
-            //When crntRatio < initRation - move vetically
-            float initAxisRatio;
-            float disntanceInX = Mathf.Abs(levelGridSize / 2 - onGridOriginPosX);
-            float disntanceInY = Mathf.Abs(levelGridSize / 2 - onGridOriginPosY);
-            if (disntanceInY != 0)
-                initAxisRatio = disntanceInX / disntanceInY;
-            else
-                initAxisRatio = 1;
+        //To go in a straight line from beggining rather than only in diagonal
+        //When crntRatio > initRatio - move horizontally
+        //When crntRatio < initRation - move vetically
+        float initAxisRatio;
+        float disntanceInX = Mathf.Abs(levelGridSize / 2 - onGridOriginPosX);
+        float disntanceInY = Mathf.Abs(levelGridSize / 2 - onGridOriginPosY);
+        if (disntanceInY != 0)
+            initAxisRatio = disntanceInX / disntanceInY;
+        else
+            initAxisRatio = 1;
 
-            int overflowCheck = 0;
-            while (!centered && overflowCheck < LevelSize * roomsBySize.Keys.Max() * 10)
+        int overflowCheck = 0;
+        while (!centered && overflowCheck < LevelSize * roomsBySize.Keys.Max() * 10)
+        {
+            onGridOriginPosX = onGridPosX + currentRoom.GetComponent<RoomParam>().OriginCoordinateX;
+            onGridOriginPosY = onGridPosY + currentRoom.GetComponent<RoomParam>().OriginCoordinateY;
+
+            disntanceInX = Mathf.Abs(levelGridSize / 2 - onGridOriginPosX);
+            disntanceInY = Mathf.Abs(levelGridSize / 2 - onGridOriginPosY);
+            float currentAxisRatio;
+            if (disntanceInY == 0)
             {
-                onGridOriginPosX = onGridPosX + currentRoom.GetComponent<RoomParam>().OriginCoordinateX;
-                onGridOriginPosY = onGridPosY + currentRoom.GetComponent<RoomParam>().OriginCoordinateY;
+                currentAxisRatio = 1;
+                initAxisRatio = 0;
+            }
+            else if (disntanceInX == 0)
+            {
+                currentAxisRatio = 0;
+                initAxisRatio = 1;
+            }
+            else
+                currentAxisRatio = disntanceInX / disntanceInY;
 
-                disntanceInX = Mathf.Abs(levelGridSize / 2 - onGridOriginPosX);
-                disntanceInY = Mathf.Abs(levelGridSize / 2 - onGridOriginPosY);
-                float currentAxisRatio;
-                if (disntanceInY == 0)
+
+            //Move horizontally
+            if (currentAxisRatio >= initAxisRatio)
+            {
+                //Left side
+                if (onGridOriginPosX < centerIndex)
                 {
-                    currentAxisRatio = 1;
-                    initAxisRatio = 0;
-                }
-                else if (disntanceInX == 0)
-                {
-                    currentAxisRatio = 0;
-                    initAxisRatio = 1;
-                }
-                else
-                    currentAxisRatio = disntanceInX / disntanceInY;
+                    for (int j = 0; j < currentRoomSize; j++)
+                        for (int i = 0; i < currentRoomSize; i++)
+                            if (currentRoomMatrix[i, j] * levelCellsMatrix[onGridPosX + i + 1, onGridPosY + j] < 0)
+                                centered = true;
 
-
-                //Move horizontally
-                if (currentAxisRatio >= initAxisRatio)
-                {
-                    //Left side
-                    if (onGridOriginPosX < centerIndex)
-                    {
-                        for (int j = 0; j < currentRoomSize; j++)
-                            for (int i = 0; i < currentRoomSize; i++)
-                                if (currentRoomMatrix[i, j] * levelCellsMatrix[onGridPosX + i + 1, onGridPosY + j] < 0)
-                                    centered = true;
-
-                        if (!centered)
-                            onGridPosX++;
-                    }
-
-                    //Right side
-                    if (onGridOriginPosX > centerIndex)
-                    {
-                        for (int j = 0; j < currentRoomSize; j++)
-                            for (int i = 0; i < currentRoomSize; i++)
-                                if (currentRoomMatrix[i, j] * levelCellsMatrix[onGridPosX + i - 1, onGridPosY + j] < 0)
-                                    centered = true;
-
-                        if (!centered)
-                            onGridPosX--;
-                    }
+                    if (!centered)
+                        onGridPosX++;
                 }
 
-                //Move vertically
-                else if (currentAxisRatio < initAxisRatio)
+                //Right side
+                if (onGridOriginPosX > centerIndex)
                 {
-                    //Up side
-                    if (onGridOriginPosY < centerIndex)
-                    {
-                        for (int j = 0; j < currentRoomSize; j++)
-                            for (int i = 0; i < currentRoomSize; i++)
-                                if (currentRoomMatrix[i, j] * levelCellsMatrix[onGridPosX + i, onGridPosY + j + 1] < 0)
-                                    centered = true;
+                    for (int j = 0; j < currentRoomSize; j++)
+                        for (int i = 0; i < currentRoomSize; i++)
+                            if (currentRoomMatrix[i, j] * levelCellsMatrix[onGridPosX + i - 1, onGridPosY + j] < 0)
+                                centered = true;
 
-                        if (!centered)
-                            onGridPosY++;
-                    }
-
-                    //Down side
-                    if (onGridOriginPosY > centerIndex)
-                    {
-                        for (int j = 0; j < currentRoomSize; j++)
-                            for (int i = 0; i < currentRoomSize; i++)
-                                if (currentRoomMatrix[i, j] * levelCellsMatrix[onGridPosX + i, onGridPosY + j - 1] < 0)
-                                    centered = true;
-
-                        if (!centered)
-                            onGridPosY--;
-                    }
+                    if (!centered)
+                        onGridPosX--;
                 }
-
-                overflowCheck++;
             }
 
+            //Move vertically
+            else if (currentAxisRatio < initAxisRatio)
+            {
+                //Up side
+                if (onGridOriginPosY < centerIndex)
+                {
+                    for (int j = 0; j < currentRoomSize; j++)
+                        for (int i = 0; i < currentRoomSize; i++)
+                            if (currentRoomMatrix[i, j] * levelCellsMatrix[onGridPosX + i, onGridPosY + j + 1] < 0)
+                                centered = true;
 
-            if (overflowCheck >= LevelSize * roomsBySize.Keys.Max() * 10)
-                UnityEngine.Debug.LogError("Overflow!");
+                    if (!centered)
+                        onGridPosY++;
+                }
 
-            for (int j = 0; j < currentRoomSize; j++)
-                for (int i = 0; i < currentRoomSize; i++)
-                    if (currentRoomMatrix[i, j] == 1)
-                        levelCellsMatrix[i + onGridPosX, j + onGridPosY] = -1;
+                //Down side
+                if (onGridOriginPosY > centerIndex)
+                {
+                    for (int j = 0; j < currentRoomSize; j++)
+                        for (int i = 0; i < currentRoomSize; i++)
+                            if (currentRoomMatrix[i, j] * levelCellsMatrix[onGridPosX + i, onGridPosY + j - 1] < 0)
+                                centered = true;
 
-            levelRoomsMatrix[onGridPosX + currentRoom.GetComponent<RoomParam>().OriginCoordinateX, onGridPosY + currentRoom.GetComponent<RoomParam>().OriginCoordinateY] = currentRoom;
+                    if (!centered)
+                        onGridPosY--;
+                }
+            }
+
+            overflowCheck++;
+        }
+
+
+        if (overflowCheck >= LevelSize * roomsBySize.Keys.Max() * 10)
+            UnityEngine.Debug.LogError("Overflow!");
+
+        for (int j = 0; j < currentRoomSize; j++)
+            for (int i = 0; i < currentRoomSize; i++)
+                if (currentRoomMatrix[i, j] == 1)
+                    levelCellsMatrix[i + onGridPosX, j + onGridPosY] = -1;
+        #endregion
+
+        levelRoomsMatrix[onGridPosX + currentRoom.GetComponent<RoomParam>().OriginCoordinateX, onGridPosY + currentRoom.GetComponent<RoomParam>().OriginCoordinateY] = currentRoom;
+
+        #region SETTING BRIDGES
+        //Checking where is no place for bridge
+        //Current room matrix is used be cause of possibility of another room in the same grid space on levelCellMatrix
+        for (int j = 0; j < currentRoomSize; j++)
+        {
+            for (int i = 0; i < currentRoomSize; i++)
+            {
+                if (currentRoomMatrix[i, j] == 1)
+                {
+                    if (i != 0)
+                    {
+                        if (currentRoomMatrix[i - 1, j] == 0)
+                            freeWaysMatrix[onGridPosX + i, onGridPosY + j].left = true;
+                    }
+                    else
+                        freeWaysMatrix[onGridPosX + i, onGridPosY + j].left = true;
+
+                    if (i != currentRoomSize - 1)
+                    {
+                        if (currentRoomMatrix[i + 1, j] == 0)
+                            freeWaysMatrix[onGridPosX + i, onGridPosY + j].right = true;
+                    }
+                    else
+                        freeWaysMatrix[onGridPosX + i, onGridPosY + j].right = true;
+
+                    if (j != 0)
+                    {
+                        if (currentRoomMatrix[i, j - 1] == 0)
+                            freeWaysMatrix[onGridPosX + i, onGridPosY + j].up = true;
+                    }
+                    else
+                        freeWaysMatrix[onGridPosX + i, onGridPosY + j].up = true;
+
+                    if (j != currentRoomSize - 1)
+                    {
+                        if (currentRoomMatrix[i, j + 1] == 0)
+                            freeWaysMatrix[onGridPosX + i, onGridPosY + j].down = true;
+                    }
+                    else
+                        freeWaysMatrix[onGridPosX + i, onGridPosY + j].down = true;
+                }
+            }
+        }
         #endregion
 
 
@@ -464,6 +570,49 @@ public class RoomsAssembler : MonoBehaviour
                         levelCellsMatrix[onGridPosX + i, onGridPosY + j] = -2;
 
                 levelRoomsMatrix[onGridPosX + bossRoomParam.OriginCoordinateX, onGridPosY + bossRoomParam.OriginCoordinateY] = bossRoom;
+
+                #region SETTING BRIDGES
+                for (int j = 0; j < bossRoomParam.RoomMatrix.GridSize.x; j++)
+                {
+                    for (int i = 0; i < bossRoomParam.RoomMatrix.GridSize.x; i++)
+                    {
+                        if (bossRoomMatrix[i, j] == 1)
+                        {
+                            if (i != 0)
+                            {
+                                if (bossRoomMatrix[i - 1, j] == 0)
+                                    freeWaysMatrix[onGridPosX + i, onGridPosY + j].left = true;
+                            }
+                            else
+                                freeWaysMatrix[onGridPosX + i, onGridPosY + j].left = true;
+
+                            if (i != bossRoomParam.RoomMatrix.GridSize.x - 1)
+                            {
+                                if (bossRoomMatrix[i + 1, j] == 0)
+                                    freeWaysMatrix[onGridPosX + i, onGridPosY + j].right = true;
+                            }
+                            else
+                                freeWaysMatrix[onGridPosX + i, onGridPosY + j].right = true;
+
+                            if (j != 0)
+                            {
+                                if (bossRoomMatrix[i, j - 1] == 0)
+                                    freeWaysMatrix[onGridPosX + i, onGridPosY + j].up = true;
+                            }
+                            else
+                                freeWaysMatrix[onGridPosX + i, onGridPosY + j].up = true;
+
+                            if (j != bossRoomParam.RoomMatrix.GridSize.x - 1)
+                            {
+                                if (bossRoomMatrix[i, j + 1] == 0)
+                                    freeWaysMatrix[onGridPosX + i, onGridPosY + j].down = true;
+                            }
+                            else
+                                freeWaysMatrix[onGridPosX + i, onGridPosY + j].down = true;
+                        }
+                    }
+                    #endregion
+                }
             }
         }
 
@@ -505,6 +654,10 @@ public class RoomsAssembler : MonoBehaviour
                 coords randomCell = candidates[randomCellIndex];
                 levelCellsMatrix[randomCell.x, randomCell.y] = -2;
                 levelRoomsMatrix[randomCell.x, randomCell.y] = uniqueRoom;
+                freeWaysMatrix[randomCell.x, randomCell.y].up = true;
+                freeWaysMatrix[randomCell.x, randomCell.y].down = true;
+                freeWaysMatrix[randomCell.x, randomCell.y].left = true;
+                freeWaysMatrix[randomCell.x, randomCell.y].right = true;
                 candidates.Remove(randomCell);
             }
             else
