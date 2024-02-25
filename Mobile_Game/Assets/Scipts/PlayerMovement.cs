@@ -1,128 +1,87 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Net;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    float maxPlayerSpeed = 3f;
-    float rotationSpeed = 10f;
-
-    public Transform tempObj;
-    public Transform playerBody;
-    public CharacterController controller;
+    [Header("Parameters")]
+    [SerializeField] public float playerSpeed = 3f;
+    [SerializeField] public float rotationSpeed = 10f;
+        
+    [Header("Externals")]
+    public Transform playerModel;
+    public Animator animator;
     public FixedJoystick FJoystick_L;
     public FixedJoystick FJoystick_R;
 
-    public Animator animator;
-    public Transform rotationBone;
+    CharacterController controller;
+    Vector3 spine1Rotation;// For lateupdate
 
-    bool isMoving = false;
-    bool isFighting = false;
+    void Start()
+    {
+        controller = GetComponent<CharacterController>();
+        if (controller == null)
+            gameObject.AddComponent<CharacterController>();
+    }
 
-    Vector3 moveDir = Vector3.zero;
-    Quaternion targetPlayerRotation = Quaternion.identity;
-    Quaternion targetTorsoRotation = Quaternion.identity;
-    Quaternion targetTorsoRotationBone = Quaternion.identity;
-    float playerSpeed = 0f;
-    float JStickLInputDegres = 0f;
-    float JStickLInputRadians = 0f;
-    float JStickRInputDegres = 0f;
-    float JStickRInputRadians = 0f;
-    float rotationTargetDelta = 0;
-    float BodyAngleDeltaNormalized = 0;
-    float JStickLDistance = 0f;
-    float JSticksDeltaTo90 = 0f;
+    //NOTE ================================================================================================================
+    //Nie krêc krêgos³upem. Dodaj animacje chodzenia po skosie i wyblenduj je
+    //=====================================================================================================================
 
     void Update()
     {
+        Vector3 moveDir = new Vector3(FJoystick_L.Direction.x, 0.0f, FJoystick_L.Direction.y);
+        Vector3 lookDir = new Vector3(FJoystick_R.Direction.x, 0.0f, FJoystick_R.Direction.y);
 
-        #region vars
+        //States for animation and movement logic
+        bool isMoving = true;
+        bool isFighting = true;
+        bool isMovingBackwards = false;
+        bool isMovingRight = false;
+        bool isMovingLeft = false;
 
-        //Pitagoras
-        JStickLDistance = Mathf.Sqrt(FJoystick_L.Horizontal * FJoystick_L.Horizontal + FJoystick_L.Vertical * FJoystick_L.Vertical);
-
-        moveDir = new Vector3(FJoystick_L.Horizontal, 0, FJoystick_L.Vertical).normalized;
-
-        JStickLInputRadians = Mathf.Atan2(FJoystick_L.Horizontal, FJoystick_L.Vertical);
-        JStickLInputDegres = JStickLInputRadians * Mathf.Rad2Deg;
-        targetPlayerRotation = Quaternion.Euler(0, JStickLInputDegres, 0);
-
-        JStickRInputRadians = Mathf.Atan2(FJoystick_R.Horizontal, FJoystick_R.Vertical);
-        JStickRInputDegres = JStickRInputRadians * Mathf.Rad2Deg;
-        targetTorsoRotation = Quaternion.Euler(0, JStickRInputDegres, 0);
-        targetTorsoRotationBone = Quaternion.Euler(0, JStickRInputDegres + 90, 0);
-
-        BodyAngleDeltaNormalized = (Quaternion.Angle(targetPlayerRotation, targetTorsoRotation)/-90)+1;
-
-        JSticksDeltaTo90 = Mathf.DeltaAngle(JStickLInputDegres, JStickRInputDegres);
-        if (JSticksDeltaTo90 > 90f)
-            JSticksDeltaTo90 = -JSticksDeltaTo90 + 180;
-        if (JSticksDeltaTo90 < -90f)
-            JSticksDeltaTo90 = -JSticksDeltaTo90 - 180;
-        JSticksDeltaTo90 = JSticksDeltaTo90 / 90;
-
-        playerSpeed = maxPlayerSpeed * JStickLDistance;
-        if (isFighting)
-            playerSpeed = playerSpeed / 3;
-
-        if (FJoystick_L.Horizontal == 0 && FJoystick_L.Vertical == 0)
+        if (moveDir.magnitude == 0)
             isMoving = false;
-        else
-            isMoving = true;
-
-        if (FJoystick_R.Horizontal == 0 && FJoystick_R.Vertical == 0)
+        if (lookDir.magnitude == 0)
             isFighting = false;
+
+        float targetPlayerAngle;
+        float currentPlayerSpeed = playerSpeed;
+        if (!isFighting)
+            targetPlayerAngle = Mathf.Atan2(-moveDir.z, moveDir.x) * Mathf.Rad2Deg;
         else
-            isFighting = true;
-
-        #endregion
-
-        #region movement
-        if (isMoving && !isFighting)
         {
-            _ = controller.Move(moveDir * playerSpeed * Time.deltaTime);
-
-            rotationTargetDelta = Quaternion.Angle(targetPlayerRotation, playerBody.rotation);
-            playerBody.rotation = Quaternion.Lerp(playerBody.rotation, targetPlayerRotation, 100f / rotationTargetDelta * rotationSpeed * Time.deltaTime);
-        }
-
-        if (isMoving && isFighting)
-        {
-            moveDir = new Vector3(FJoystick_L.Horizontal, 0, FJoystick_L.Vertical).normalized;
-            _ = controller.Move(moveDir * playerSpeed * Time.deltaTime);
-
-            rotationBone.rotation = Quaternion.Lerp(rotationBone.rotation, targetTorsoRotationBone, 100f / rotationTargetDelta * rotationSpeed * Time.deltaTime);
-            playerBody.rotation = Quaternion.Lerp(playerBody.rotation, targetTorsoRotation, 100f / rotationTargetDelta * rotationSpeed * Time.deltaTime);
+            targetPlayerAngle = Mathf.Atan2(-lookDir.z, lookDir.x) * Mathf.Rad2Deg;
+            currentPlayerSpeed /= 2;
         }
         
-        if(!isFighting)
-        {
-            rotationBone.rotation = Quaternion.Euler(rotationBone.eulerAngles.x, playerBody.eulerAngles.y + 90, rotationBone.eulerAngles.z);
-        }
-
-        #endregion
-
-        #region animations
-
-        animator.SetFloat("Blend", JStickLDistance);
-        animator.SetFloat("WalkBlendHoriz", -JSticksDeltaTo90);
-        animator.SetFloat("WalkBlendVert", BodyAngleDeltaNormalized);
-
-        if (isFighting)
-            animator.SetFloat("Blend", Mathf.Clamp(animator.GetFloat("Blend"), 0f, 0.5f));
+        if (isMoving || isFighting)
+            playerModel.rotation = Quaternion.Euler(0f, targetPlayerAngle - 90, 0f);
 
 
-        if (JStickLDistance == 0 && animator.GetFloat("Blend") != 0)
-        {
-            animator.SetFloat("Blend", animator.GetFloat("Blend") - Time.deltaTime * maxPlayerSpeed);
-        }
+        controller.Move(moveDir * currentPlayerSpeed * Time.deltaTime);
 
 
-        if (isFighting)
-            animator.SetBool("IsFighting", true);
-        else
-            animator.SetBool("IsFighting", false);
 
-        #endregion
+
+
+        //normalized: 1 forward, -1 backward
+        //BUG: going to -1.2 when backwards
+        float walkBlendY = moveDir.magnitude - Vector3.Angle(moveDir, lookDir) / 90;
+        if (!isFighting)
+            walkBlendY *= 2;
+        //normalized: 1 left, -1 right
+        float walkBlendX = Mathf.Sin(Vector3.SignedAngle(moveDir, lookDir, transform.up) * Mathf.PI / 180);
+
+        animator.SetFloat("WalkBlendX", walkBlendX);
+        animator.SetFloat("WalkBlendY", walkBlendY);
+
+        animator.SetBool("isFighting", isFighting);
+        animator.SetBool("isMoving", isMoving);
+
+
+        Debug.Log((float)(int)(walkBlendX*100)/100 + "   ||   " + (float)(int)(walkBlendY * 100) / 100);
+
     }
 }
