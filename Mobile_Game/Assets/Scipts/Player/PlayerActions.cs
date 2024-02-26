@@ -7,33 +7,29 @@ public class PlayerActions : MonoBehaviour
 {
     [SerializeField] float pickUpRadius;
     [SerializeField] GameObject pickUpButton;
-    [SerializeField] GameObject closestObjectHighlight;
-    GameObject createdHighlight;
+    [SerializeField] GameObject itemHighlight;
+    GameObject highlightObject;
+    bool highlightCreated = false;
     Button pickUpButtonComponent;
 
     bool isPickingUp = false;
 
-    bool noErrors = true;
 
+    bool noErrors = true;
     void Start()
     {
-        pickUpButtonComponent = pickUpButton.GetComponent<Button>();
-
-        if (pickUpButtonComponent != null)
-        {
-            // Dodaj funkcjê obs³uguj¹c¹ klikniêcie przycisku
-            pickUpButtonComponent.onClick.AddListener(OnPickUpButtonClick);
-        }
+        if (pickUpButton.GetComponent<Button>() != null)
+            pickUpButton.GetComponent<Button>().onClick.AddListener(OnPickUpButtonClick);
         else
-        {
             Debug.LogError("Button component not found on pickUpButton.");
-        }
     }
     // Update is called once per frame
     void Update()
     {
         if (noErrors)
         {
+
+            #region Picking up items
             Vector3 point1Capsule = transform.position + new Vector3(0.0f, 10.0f, 0.0f);
             Vector3 point2Capsule = transform.position - new Vector3(0.0f, 10.0f, 0.0f);
             Collider[] colliders = Physics.OverlapCapsule(point1Capsule, point2Capsule, pickUpRadius);
@@ -42,7 +38,7 @@ public class PlayerActions : MonoBehaviour
 
             foreach (Collider collider in colliders)
             {
-                if (collider.gameObject.CompareTag("Pickable"))
+                if (collider.gameObject.GetComponent<Pickable>() != null)
                 {
                     if (closestPickableObject == null)
                     {
@@ -65,13 +61,19 @@ public class PlayerActions : MonoBehaviour
                 pickUpButton.SetActive(true);
 
                 //Instantiate highlight below object
-                Ray rayToGround = new Ray(closestPickableObject.transform.position, - transform.up);
-                float maxRaycastDistance = 100f;
+                Ray rayToGround = new Ray(closestPickableObject.transform.position, -transform.up);
+                float maxRaycastDistance = 100.0f;
                 RaycastHit hitInfo;
                 if (Physics.Raycast(rayToGround, out hitInfo, maxRaycastDistance))
                 {
                     Vector3 groundPoint = hitInfo.point;
-                    
+                    if (!highlightCreated)
+                    {
+                        highlightObject = Instantiate(itemHighlight, groundPoint + new Vector3(0.0f, 0.01f, 0.0f), Quaternion.identity);
+                        highlightCreated = true;
+                    }
+                    else
+                        highlightObject.transform.position = groundPoint + new Vector3(0.0f, 0.01f, 0.0f);
                 }
 
                 if (isPickingUp)
@@ -81,14 +83,14 @@ public class PlayerActions : MonoBehaviour
                 }
             }
             else
+            {
                 pickUpButton.SetActive(false);
-
-            
-
-            
+                Destroy(highlightObject);
+                highlightCreated = false;
+            }
+            #endregion
         }
     }
-
     public void OnPickUpButtonClick()
     {
         isPickingUp=true;
