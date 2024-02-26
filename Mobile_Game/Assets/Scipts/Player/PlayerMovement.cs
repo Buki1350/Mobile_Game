@@ -1,19 +1,25 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Net;
 using UnityEngine;
 
+
+
 public class PlayerMovement : MonoBehaviour
 {
-    [Header("Parameters")]
     [SerializeField] public float playerSpeed = 3f;
     [SerializeField] public float rotationSpeed = 10f;
         
-    [Header("Externals")]
     public Transform playerModel;
-    public Animator animator;
     public FixedJoystick FJoystick_L;
     public FixedJoystick FJoystick_R;
+
+    [NonSerialized] public float walkBlendX;
+    [NonSerialized] public float walkBlendY;
+    //States for animation and movement logic
+    [NonSerialized] public bool isMoving;
+    [NonSerialized] public bool isFighting;
 
     CharacterController controller;
     Vector3 spine1Rotation;// For lateupdate
@@ -34,12 +40,8 @@ public class PlayerMovement : MonoBehaviour
         Vector3 moveDir = new Vector3(FJoystick_L.Direction.x, 0.0f, FJoystick_L.Direction.y);
         Vector3 lookDir = new Vector3(FJoystick_R.Direction.x, 0.0f, FJoystick_R.Direction.y);
 
-        //States for animation and movement logic
-        bool isMoving = true;
-        bool isFighting = true;
-        bool isMovingBackwards = false;
-        bool isMovingRight = false;
-        bool isMovingLeft = false;
+        isMoving = true;
+        isFighting = true;
 
         if (moveDir.magnitude == 0)
             isMoving = false;
@@ -63,25 +65,19 @@ public class PlayerMovement : MonoBehaviour
         controller.Move(moveDir * currentPlayerSpeed * Time.deltaTime);
 
 
-
-
+        //FOR LOWERBODY ANIMATION BLEND TREE
 
         //normalized: 1 forward, -1 backward
         //BUG: going to -1.2 when backwards
-        float walkBlendY = moveDir.magnitude - Vector3.Angle(moveDir, lookDir) / 90;
+        walkBlendY = moveDir.magnitude - Vector3.Angle(moveDir, lookDir) / 90;
         if (!isFighting)
             walkBlendY *= 2;
         //normalized: 1 left, -1 right
-        float walkBlendX = Mathf.Sin(Vector3.SignedAngle(moveDir, lookDir, transform.up) * Mathf.PI / 180);
-
-        animator.SetFloat("WalkBlendX", walkBlendX);
-        animator.SetFloat("WalkBlendY", walkBlendY);
-
-        animator.SetBool("isFighting", isFighting);
-        animator.SetBool("isMoving", isMoving);
+        walkBlendX = Mathf.Sin(Vector3.SignedAngle(moveDir, lookDir, transform.up) * Mathf.PI / 180);
 
 
-        Debug.Log((float)(int)(walkBlendX*100)/100 + "   ||   " + (float)(int)(walkBlendY * 100) / 100);
+
+        //Debug.Log((float)(int)(walkBlendX*100)/100 + "   ||   " + (float)(int)(walkBlendY * 100) / 100);
 
     }
 }
