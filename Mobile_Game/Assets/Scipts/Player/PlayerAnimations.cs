@@ -48,10 +48,7 @@ public class PlayerAnimations : MonoBehaviour
             animator.SetLayerWeight(animator.GetLayerIndex("UpperBody"), 1);
             switch (pWeapons.currentWeapon)
             {
-                case Weapons.none:
-                    weaponIndex = 0;
-                    pWeapons.swords[pWeapons.currentWeaponIndex].SetActive(true);
-                    break;
+                case Weapons.none: weaponIndex = 0; break;
                 case Weapons.sword: weaponIndex = 1; break;
                 case Weapons.greatsword: weaponIndex = 2; break;
                 case Weapons.axe: weaponIndex = 3; break;
