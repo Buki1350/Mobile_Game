@@ -38,7 +38,7 @@ public class PlayerActions : MonoBehaviour
 
             foreach (Collider collider in colliders)
             {
-                if (collider.gameObject.GetComponent<Pickable>() != null)
+                if (collider.gameObject.GetComponent<Item>() != null || collider.gameObject.GetComponent<Weapon>() != null)
                 {
                     if (closestPickableObject == null)
                     {
@@ -61,7 +61,20 @@ public class PlayerActions : MonoBehaviour
                 pickUpButton.SetActive(true);
 
                 //Instantiate highlight below object
-                Ray rayToGround = new Ray(closestPickableObject.transform.position, -transform.up);
+
+                Vector3 rayOrigin = closestPickableObject.transform.position;
+                if (closestPickableObject.GetComponent<BoxCollider>() != null)
+                    rayOrigin = closestPickableObject.GetComponent<BoxCollider>().bounds.center;
+                else if (closestPickableObject.GetComponent<CapsuleCollider>() != null)
+                    rayOrigin = closestPickableObject.GetComponent<CapsuleCollider>().bounds.center;
+                else if (closestPickableObject.GetComponent<SphereCollider>() != null)
+                    rayOrigin = closestPickableObject.GetComponent<SphereCollider>().bounds.center;
+                else if (closestPickableObject.GetComponent<MeshCollider>() != null)
+                    rayOrigin = closestPickableObject.GetComponent<MeshCollider>().bounds.center;
+                else
+                    Debug.LogError($"<color=red>{closestPickableObject.name} has no proper collider!</color>");
+
+                Ray rayToGround = new Ray(rayOrigin, -transform.up);
                 float maxRaycastDistance = 100.0f;
                 RaycastHit hitInfo;
                 if (Physics.Raycast(rayToGround, out hitInfo, maxRaycastDistance))
