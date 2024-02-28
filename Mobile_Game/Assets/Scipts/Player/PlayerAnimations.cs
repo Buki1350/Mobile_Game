@@ -8,8 +8,10 @@ public class PlayerAnimations : MonoBehaviour
 
     PlayerMovement pMovement;
     PlayerWeapons pWeapons;
+    
     void Start()
     {
+        #region init and errors
         if (gameObject.GetComponent<PlayerMovement>() == null)
             Debug.LogError($"<color=red>PlayerAnimations: PlayerMovement script is missing!</color>");
         else
@@ -19,7 +21,7 @@ public class PlayerAnimations : MonoBehaviour
             Debug.LogError($"<color=red>PlayerAnimations: PlayerWeapons script is missing!</color>");
         else
             pWeapons = gameObject.GetComponent<PlayerWeapons>();
-
+        #endregion
     }
 
     // Update is called once per frame
@@ -46,13 +48,18 @@ public class PlayerAnimations : MonoBehaviour
                 greataxe.SetActive(false);
 
             animator.SetLayerWeight(animator.GetLayerIndex("UpperBody"), 1);
-            switch (pWeapons.currentWeapon)
+            if (pWeapons.currentWeapon == null)
+                weaponIndex = 0;
+            else
             {
-                case Weapons.none: weaponIndex = 0; break;
-                case Weapons.sword: weaponIndex = 1; break;
-                case Weapons.greatsword: weaponIndex = 2; break;
-                case Weapons.axe: weaponIndex = 3; break;
-                case Weapons.greataxe: weaponIndex = 4; break;
+                switch (pWeapons.currentWeapon.GetComponent<Weapon>().weaponType)
+                {
+                    case Weapons.sword: weaponIndex = 1; break;
+                    case Weapons.greatsword: weaponIndex = 2; break;
+                    case Weapons.axe: weaponIndex = 3; break;
+                    case Weapons.greataxe: weaponIndex = 4; break;
+
+                }
             }
         }
         else

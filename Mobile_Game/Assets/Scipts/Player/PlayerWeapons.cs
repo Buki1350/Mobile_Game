@@ -20,8 +20,11 @@ public class PlayerWeapons : MonoBehaviour
     [SerializeField] public GameObject[] axes;
     [SerializeField] public GameObject[] greataxes;
 
-    [NonSerialized] public Weapons currentWeapon = Weapons.none;
-    [NonSerialized] public int currentWeaponIndex = 0;
-    [NonSerialized] public Weapons secondaryWeapon = Weapons.none;
-    [NonSerialized] public int secondaryWeaponIndex = 0;
+    [NonSerialized] public GameObject currentWeapon;
+    [NonSerialized] public GameObject secondaryWeapon;
+
+    //[NonSerialized] public Weapons currentWeapon = Weapons.none;
+    //[NonSerialized] public int currentWeaponIndex = 0;
+    //[NonSerialized] public Weapons secondaryWeapon = Weapons.none;
+    //[NonSerialized] public int secondaryWeaponIndex = 0;
 }
