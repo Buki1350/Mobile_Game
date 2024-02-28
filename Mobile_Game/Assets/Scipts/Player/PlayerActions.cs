@@ -25,6 +25,7 @@ public class PlayerActions : MonoBehaviour
 
     [Header("Player")]
     [SerializeField] float pickUpRadius;
+    [SerializeField] GameObject weaponHolder;
 
     PlayerWeapons pWeapons;
 
@@ -65,6 +66,11 @@ public class PlayerActions : MonoBehaviour
             noErrors = false;
         }
         #endregion
+
+        foreach (Transform weapon in weaponHolder.transform)
+        {
+            weapon.gameObject.SetActive(false);
+        }
     }
 
     void Update()
@@ -158,14 +164,19 @@ public class PlayerActions : MonoBehaviour
                         }
 
                         if (pWeapons.currentWeapon == null)
+                        {
                             pWeapons.currentWeapon = newWeapon;
+                            weaponHolder.transform.Find(pWeapons.currentWeapon.name).gameObject.SetActive(true);
+                        }
                         else if (pWeapons.secondaryWeapon == null)
                             pWeapons.secondaryWeapon = newWeapon;
                         else
                         {
+                            weaponHolder.transform.Find(pWeapons.currentWeapon.name).gameObject.SetActive(false);
                             GameObject weaponToThrowAway = Instantiate(pWeapons.currentWeapon, closestPickableObject.transform.position, Quaternion.identity);
                             weaponToThrowAway.name = pWeapons.currentWeapon.name;
                             pWeapons.currentWeapon = newWeapon;
+                            weaponHolder.transform.Find(pWeapons.currentWeapon.name).gameObject.SetActive(true);
                         }
                         Destroy(closestPickableObject);
                     }
@@ -206,8 +217,10 @@ public class PlayerActions : MonoBehaviour
 
     public void SwapWeapons()
     {
+        weaponHolder.transform.Find(pWeapons.currentWeapon.name).gameObject.SetActive(false);
         GameObject tempSwapWeapon = pWeapons.currentWeapon;
         pWeapons.currentWeapon = pWeapons.secondaryWeapon;
         pWeapons.secondaryWeapon = tempSwapWeapon;
+        weaponHolder.transform.Find(pWeapons.currentWeapon.name).gameObject.SetActive(true);
     }
 }
