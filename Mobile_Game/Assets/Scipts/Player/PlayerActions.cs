@@ -159,7 +159,7 @@ public class PlayerActions : MonoBehaviour
                         }
                         if (newWeapon == null)
                         {
-                            Debug.LogError($"<color=red>PlayerActions: Picked weapon ({closestPickableObject.name}) is undefinded by WeaponManager prefab list!</color>");
+                            Debug.LogError($"<color=red>PlayerActions: Weapon ({closestPickableObject.name}) is not in WeaponManager prefab list!</color>");
                             noErrors = false;
                         }
 

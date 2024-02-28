@@ -6,6 +6,7 @@ using UnityEngine;
 public enum Weapons
 {
     none,
+    nonWeapon,
     sword,
     greatsword,
     axe,

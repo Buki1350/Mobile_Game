@@ -54,11 +54,11 @@ public class PlayerAnimations : MonoBehaviour
             {
                 switch (pWeapons.currentWeapon.GetComponent<Weapon>().weaponType)
                 {
-                    case Weapons.sword: weaponIndex = 1; break;
-                    case Weapons.greatsword: weaponIndex = 2; break;
-                    case Weapons.axe: weaponIndex = 3; break;
-                    case Weapons.greataxe: weaponIndex = 4; break;
-
+                    case Weapons.nonWeapon: weaponIndex = 1; break;
+                    case Weapons.sword: weaponIndex = 2; break;
+                    case Weapons.greatsword: weaponIndex = 3; break;
+                    case Weapons.axe: weaponIndex = 4; break;
+                    case Weapons.greataxe: weaponIndex = 5; break;
                 }
             }
         }
